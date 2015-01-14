@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.4/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="/static/reports/css/automation.css">
+    <title>VS Report</title>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top">
+<div class="container-fluid">
+<a href="/reports/">Return to selection page</a>
+    <div class="row">
+        <select id="run1" class="selectcontainer col-sm-6" onchange="refreshresults({{ choice }})">
+            {% for run in runlist %}
+                <option value='{{ run.cycle_id }},{{ run.algo_version }}'>Algo Version: {{ run.algo_version }} Crashes: {{ run.crash_count }}</option>
+            {% endfor %}
+        </select>
+
+        <select id="run2" class="selectcontainer col-sm-6" onchange="refreshresults({{ choice }})">
+            {% for run in runlist %}
+                <option value='{{ run.cycle_id }},{{ run.algo_version }}'>Algo Version: {{ run.algo_version }} Crashes: {{ run.crash_count }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="row">
+        <video id="div_original" class="col-xs-4" controls></video>
+        <video id="div_video1" class="col-xs-4" controls></video>
+        <video id="div_video2" class="col-xs-4" controls></video>
+    </div>
+    <div class="row">
+         <input type="hidden" id="currentvideo">
+        <label><input type="checkbox" id="showallvids" checked="true" onclick='refreshresults({{ choice }});'>Show All Vids</label>
+        <button id="downloadbutton" class="col-xs-2 btn btn-lg btn-warning" onclick="DownloadRemake(this)">Download</button>
+        <button id="downloadbutton" class="col-xs-2 btn btn-lg btn-warning" onclick="DownloadSelected('run1')">Download Select 1</button>
+        <button id="downloadbutton" class="col-xs-2 btn btn-lg btn-warning" onclick="DownloadSelected('run2')">Download Select 2</button>
+        <input type="button" class="col-xs-2 btn btn-lg btn-warning" onclick="simultaneousPlayVideos()" value="Simultenous Play">
+    </div>
+    <div class="row">
+        <label class="col-xs-1">Average 1:</label>
+        <label id="selavg1" class="col-xs-4"></label>
+        <label class="col-xs-1">Average 2:</label>
+        <label id="selavg2" class="col-xs-4"></label>
+    </div>
+</div>
+</nav>
+
+<div id="maintable">
+
+</div>
+
+<div id="loading"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<script src="/static/reports/js/algovsalgo.js"></script>
+
+</body>
+</html>
