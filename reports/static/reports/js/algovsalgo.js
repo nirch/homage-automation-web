@@ -372,13 +372,13 @@ function DownloadRemake(button) {
 
 function DownloadSelected(run_id){
     var currentvideo = document.getElementById("currentvideo");
-    var selrun1 = document.getElementById(run_id);
-    var selval1 = selrun1.options[selrun1.selectedIndex].value;
-    var cycle_id1 = selval1.split(',')[0];
-    var algo1 = selval1.split(',')[1];
+    var selrun = document.getElementById(run_id);
+    var selval = selrun.options[selrun.selectedIndex].value;
+    var cycle_id = selval.split(',')[0];
+    var algo = selval.split(',')[1];
 
-    var movUrl = "https://s3.amazonaws.com/homage-automation/Output/" + algo1 + "/" + cycle_id1 + "/" + currentvideo.value + "/output.mp4";
-    var plfUrl = "https://s3.amazonaws.com/homage-automation/Output/" + algo1 + "/" + cycle_id1 + "/" + currentvideo.value + "/output.plf";
+    var movUrl = "https://s3.amazonaws.com/homage-automation/Output/" + algo + "/" + cycle_id + "/" + currentvideo.value + "/" + algo + "_" + cycle_id + "_" + currentvideo.value + "output.mp4";
+    var plfUrl = "https://s3.amazonaws.com/homage-automation/Output/" + algo + "/" + cycle_id + "/" + currentvideo.value + "/" + algo + "_" + cycle_id + "_" + currentvideo.value + "output.plf";
 
 
     var pom = document.createElement('a');
