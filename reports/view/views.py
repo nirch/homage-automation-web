@@ -79,4 +79,4 @@ def upload_file(request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             handle_uploaded_file(request.FILES['file'])
-            # return HttpResponseRedirect('/success/url/')
+            return HttpResponseRedirect('/success/url/')
