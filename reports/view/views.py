@@ -1,12 +1,15 @@
+from django.core.urlresolvers import reverse
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader, RequestContext
-from reports.model.models import Crashrun, UploadFileForm
-from reports.octopus import octopus
 import simplejson
+
+from reports.model.models import Crashrun, UploadFileForm, DocumentForm, Document
+from reports.octopus import octopus
 from reports.octopus.octopus import handle_uploaded_file
+from django.views.decorators.csrf import csrf_protect
 
-
+@csrf_protect
 def index(request):
     # cr_list = octopus.get_crash_runs()
     template = loader.get_template('reports/index.html')
@@ -74,11 +77,38 @@ def set_video_group(request, choice, video_id, group):
     return HttpResponse(status, content_type = "text/plain")
 
 
+# def upload_file(request):
+#     form = None
+#     if request.method == 'POST':
+#         form = UploadFileForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             handle_uploaded_file(request.FILES['file'])
+#             return HttpResponseRedirect('/success/url/')
+#     return render_to_response('reports/index.html', {'form': form})
+
+
 def upload_file(request):
-    form = None
+    # Handle file upload
     if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
+        form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
-            handle_uploaded_file(request.FILES['file'])
-            return HttpResponseRedirect('/success/url/')
-    return render_to_response('reports/index.html', {'form': form})
+            # newdoc = Document(docfile = request.FILES['docfile'])
+            # newdoc.save()
+
+            docfile = request.FILES['docfile']
+            handle_uploaded_file(docfile)
+
+            # Redirect to the document list after POST
+            # return HttpResponseRedirect('reports/index.html')
+    else:
+        form = DocumentForm() # A empty, unbound form
+
+    # Load documents for the list page
+    documents = Document.objects.all()
+
+    # Render list page with the documents and the form
+    return render_to_response(
+        'reports/index.html',
+        {'documents': documents, 'form': form},
+        context_instance=RequestContext(request)
+    )

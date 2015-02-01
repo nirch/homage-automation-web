@@ -19,7 +19,8 @@ def get_auto_runs():
 
 def handle_uploaded_file(f):
     # create folder on local computer
-    algo_folder_name = time.strftime("v-%y-%m-%d/")
+    algo_folder_name = time.strftime("/media/v-%y-%m-%d/")
+    aws_folder_name = time.strftime("/v-%y-%m-%d/")
     if not os.path.exists(algo_folder_name):
         os.makedirs(algo_folder_name)
     # Create file on local computer
@@ -30,9 +31,9 @@ def handle_uploaded_file(f):
             destination.write(chunk)
 
     aws_helper.uploadfiletos3(consts.awsautomationbucket,
-                              consts.awsalgorithem + algo_folder_name + algo_file_name, algo_folder_name + algo_file_name)
+                              consts.awsalgorithem + aws_folder_name + algo_file_name, algo_folder_name + algo_file_name)
 
-    os.remove(algo_folder_name)
+    # os.remove(algo_folder_name)
 
 
 def get_auto_run_videos(cycle_id1, cycle_id2, ugroup):
