@@ -1,9 +1,10 @@
-from django.shortcuts import render
-from django.http import HttpResponse, Http404
+from django.shortcuts import render, render_to_response
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader, RequestContext
-from reports.model.models import Crashrun
+from reports.model.models import Crashrun, UploadFileForm
 from reports.octopus import octopus
 import simplejson
+from reports.octopus.octopus import handle_uploaded_file
 
 
 def index(request):
@@ -71,3 +72,11 @@ def set_video_group(request, choice, video_id, group):
 # def download_video(request, video_name):
 #     video = octopus.get_video(video_name)
     return HttpResponse(status, content_type = "text/plain")
+
+
+def upload_file(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            handle_uploaded_file(request.FILES['file'])
+            # return HttpResponseRedirect('/success/url/')

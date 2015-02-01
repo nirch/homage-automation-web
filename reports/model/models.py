@@ -11,6 +11,10 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+# In forms.py...
+from django import forms
+
+
 
 class Algorithmversions(models.Model):
     algo_version = models.CharField(db_column='Algo_version', max_length=45, blank=True)  # Field name made lowercase.
@@ -305,3 +309,8 @@ class View1(models.Model):
     class Meta:
         managed = False
         db_table = 'view1'
+
+
+class UploadFileForm(forms.Form):
+    title = forms.CharField(max_length=50)
+    file = forms.FileField()

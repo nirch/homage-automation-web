@@ -5,8 +5,21 @@
     <title></title>
 </head>
 <body>
-<a href="1">Algorithm Runs Report</a>
-<a href="0">Crash Runs Report</a>
+<h1>Choose Algorithm run or Crash run</h1>
+<div>
+    <a href="1">Algorithm Runs Report</a>
+</div>
+<div>
+    <a href="0">Crash Runs Report</a>
+</div>
+<br>
+<br>
+<div>
+    <h1>Upload New Algorithm Version</h1>
+    <form enctype="multipart/form-data" method="post" action="{% url 'upload_file' %}">
+        <p><input type="submit" value="Upload" /></p>
+    </form>
+</div>
 
 </body>
 </html>

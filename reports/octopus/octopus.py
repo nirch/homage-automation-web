@@ -1,5 +1,10 @@
+import os
+from reports.networking import aws_helper
+from reports.octopus import consts
+import time
+
 __author__ = 'dangalg'
-from reports.model.models import Crashrun, Autorun, Crashrunvideo, Autorunvideo, Videos
+from reports.model.models import Crashrun, Autorun, Crashrunvideo, Autorunvideo, Videos, UploadFileForm
 
 
 def get_crash_runs():
@@ -11,8 +16,23 @@ def get_auto_runs():
     ar_list = Autorun.objects.order_by('-algo_version')[:10]
     return ar_list
 
-# def get_video():
 
+def handle_uploaded_file(f):
+    # create folder on local computer
+    algo_folder_name = time.strftime("v-%y-%m-%d/")
+    if not os.path.exists(algo_folder_name):
+        os.makedirs(algo_folder_name)
+    # Create file on local computer
+    algo_file_name = 'UniformMattingCA.exe'
+
+    with open(algo_folder_name + algo_file_name, 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+    aws_helper.uploadfiletos3(consts.awsautomationbucket,
+                              consts.awsalgorithem + algo_folder_name + algo_file_name, algo_folder_name + algo_file_name)
+
+    os.remove(algo_folder_name)
 
 
 def get_auto_run_videos(cycle_id1, cycle_id2, ugroup):

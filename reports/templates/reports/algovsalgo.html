@@ -9,9 +9,10 @@
     <title>VS Report</title>
 </head>
 <body>
+<div class="container-fluid tbs-container-fluid header-filter-container">
 <nav class="navbar navbar-default navbar-fixed-top">
 <div class="container-fluid">
-<a href="/reports/">Return to selection page</a>
+    <a href="/reports/">Return to selection page</a>
     <div class="row">
         <select id="run1" class="selectcontainer col-sm-6" onchange="refreshresults({{ choice }})">
             {% for run in runlist %}
@@ -46,6 +47,7 @@
     </div>
 </div>
 </nav>
+</div>
 
 <div id="maintable">
 

@@ -275,9 +275,13 @@ function getvideos(cycle_id1, cycle_id2, choice, showallvids){
             }
             selavg1.innerHTML = (parseInt(selavg1.innerHTML) / googVidCounter);
             selavg2.innerHTML = (parseInt(selavg2.innerHTML) / googVidCounter);
-            $('#results').DataTable({
+            var table = $('#results').DataTable({
                 paging: false
             });
+            new $.fn.dataTable.FixedHeader( table, {
+                "offsetTop": 350
+            } );
+
             loading.innerHTML = "";
         }
     };
@@ -339,6 +343,8 @@ function simultaneousPlayVideos(){
     var myPlayer2 = document.getElementById("div_video2");
     myPlayer.pause();
     myPlayer2.pause();
+    myPlayer.stop();
+    myPlayer2.stop();
     myPlayer.play();
     myPlayer2.play();
 }
@@ -347,27 +353,13 @@ function simultaneousPlayVideos(){
 function DownloadRemake(button) {
 
     var currentvideo = document.getElementById("currentvideo");
-    var movUrl = "https://s3.amazonaws.com/homage-automation/Videos/" + currentvideo.value + "/" + currentvideo.value + ".mov";
-    var ctrUrl = "https://s3.amazonaws.com/homage-automation/Videos/" + currentvideo.value + "/" + currentvideo.value + ".ctr";
-    var plfUrl = "https://s3.amazonaws.com/homage-automation/Videos/" + currentvideo.value + "/" + currentvideo.value + ".plf";
+    var movUrl = "https://s3.amazonaws.com/homage-automation/Videos/" + currentvideo.value + ".zip";
 
     var pom = document.createElement('a');
     pom.setAttribute('href', movUrl);
-    pom.setAttribute('download', currentvideo.value + ".mov");
-    pom.setAttribute('type', 'video/quicktime');
+    pom.setAttribute('download', currentvideo.value + ".zip");
+    pom.setAttribute('type', 'application/zip');
     pom.click();
-
-    var pom2 = document.createElement('a');
-    pom2.setAttribute('href', ctrUrl);
-    pom2.setAttribute('download', currentvideo.value + ".ctr");
-    pom2.setAttribute('type', 'text/plain');
-    pom2.click();
-
-    var pom3 = document.createElement('a');
-    pom3.setAttribute('href', plfUrl);
-    pom3.setAttribute('download', currentvideo.value + ".plf");
-    pom3.setAttribute('type', 'text/plain');
-    pom3.click();
 }
 
 function DownloadSelected(run_id){
