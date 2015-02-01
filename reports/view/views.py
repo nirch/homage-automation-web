@@ -75,8 +75,10 @@ def set_video_group(request, choice, video_id, group):
 
 
 def upload_file(request):
+    form = None
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             handle_uploaded_file(request.FILES['file'])
             return HttpResponseRedirect('/success/url/')
+    return render_to_response('reports/index.html', {'form': form})
