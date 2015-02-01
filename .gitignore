@@ -1,1 +1,4 @@
 .idea/
+homage_automation_web/__pycache__/settings.cpython-34.pyc
+*.pyc
+homage_automation_web/settings.py
