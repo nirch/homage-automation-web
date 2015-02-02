@@ -32,7 +32,7 @@ def handle_uploaded_file(f):
     aws_helper.uploadfiletos3(consts.awsautomationbucket,
                               consts.awsalgorithem + algo_folder_name + algo_file_name, algo_folder_name + algo_file_name)
 
-    os.remove(algo_folder_name)
+    # os.remove(algo_folder_name)
 
 
 def get_auto_run_videos(cycle_id1, cycle_id2, ugroup):
