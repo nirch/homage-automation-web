@@ -2,9 +2,14 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.4/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="/static/reports/css/automation.css">
+    <meta charset="UTF-8">
+    <title>Main Homage Reports Page</title>
 </head>
-<body>
+<body style="padding-top: 0px">
 <h1>Choose Algorithm run or Crash run</h1>
 <div>
     <a href="1">Algorithm Runs Report</a>
@@ -29,6 +34,41 @@
         <p><input type="submit" value="Upload" /></p>
     </form>
 </div>
+<br>
+<br>
+<h1>Run Algorithm</h1>
+<div class="container-fluid">
+    <a href="/reports/">Return to selection page</a>
+    <div class="row">
+        <select id="algorunselect" class="selectcontainer">
+            {% for algo in algo_list %}
+                <option value='{{ algo }}'>{{ algo }}</option>
+            {% endfor %}
+        </select>
+        <button id="runAlgorithm" class="btn btn-lg btn-warning" onclick="runAlgortihm()">Run Algorithm</button>
+    </div>
+</div>
+<br>
+<div>
+    Running Algorithm progress:
+<div id="progress_message"></div>
+<progress id="algorun_progress" value="0" max="100">
+</progress>
+&nbsp;&nbsp;
+    <button id="updateProgress" class="btn btn-lg btn-warning" onclick="updateProgress()">Refresh</button>
+</div>
+
+Not For Nir:
+<br>
+<h5>Crash Run? &nbsp;<input type="checkbox" id="crashrun">&nbsp;&nbsp;
+Optimize?&nbsp; <input type="checkbox" id="optimize">&nbsp;&nbsp;
+Update Videos?&nbsp; <input type="checkbox" id="updatedb"></h5>
+<br>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<script src="/static/reports/js/algovsalgo.js"></script>
 
 </body>
 </html>

@@ -412,6 +412,75 @@ function setVideoGroup(choice , videoid, group, chkid){
     xmlHttp.send( null );
 }
 
+
+function runAlgortihm(){
+
+    algorunselect = document.getElementById('algorunselect');
+    algoversion = algorunselect.options[algorunselect.selectedIndex].value;
+    crashrunval = 0;
+    optimizeval = 0;
+    updatedbval = 0;
+    var chkbxCrashrun = document.getElementById('crashrun');
+    if( chkbxCrashrun.checked ){
+        crashrunval = 1
+    }
+    var chkbxoptimize = document.getElementById('optimize');
+    if( chkbxoptimize.checked ){
+        optimizeval = 1
+    }
+    var chkbxupdatedb = document.getElementById('updatedb');
+    if( chkbxupdatedb.checked ){
+        updatedbval = 1
+    }
+
+
+    var theUrl = 'run_algo/' + crashrunval + '/' + optimizeval + '/' + updatedbval + '/' + String(algoversion);
+
+    var xmlHttp = null;
+
+    xmlHttp = new XMLHttpRequest();
+
+    xmlHttp.onreadystatechange=function()
+    {
+        if (xmlHttp.readyState==4 && xmlHttp.status==200)
+        {
+            alert('finished running algorithm');
+        }
+    };
+
+    xmlHttp.open( "GET", theUrl, true );
+    xmlHttp.send( null );
+}
+
+function updateProgress(){
+
+    var theUrl = 'get_progress/';
+
+    var xmlHttp = null;
+
+    xmlHttp = new XMLHttpRequest();
+
+    xmlHttp.onreadystatechange=function()
+    {
+        if (xmlHttp.readyState==4 && xmlHttp.status==200)
+        {
+            var progress = JSON.parse(xmlHttp.responseText);
+            algoprogress = document.getElementById('algorun_progress');
+            progress_message = document.getElementById('progress_message');
+            algoprogress.value = progress.algorun.value;
+            algoprogress.max = progress.algorun.max;
+            progress_message.innerHTML = progress.algorun.status;
+        }
+    };
+
+    xmlHttp.open( "GET", theUrl, true );
+    xmlHttp.send( null );
+}
+
+
+
+//runalgo/(?P<crashrun>0|1)/(?P<optimize>0|1)/(?P<updatedb>0|1)/(?P<algoversion>[
+
 //$(document).ready(function(){
 //
 //

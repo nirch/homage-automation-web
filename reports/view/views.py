@@ -1,3 +1,4 @@
+import json
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse, Http404, HttpResponseRedirect
@@ -5,16 +6,27 @@ from django.template import loader, RequestContext
 import simplejson
 
 from reports.model.models import Crashrun, UploadFileForm, DocumentForm, Document
-from reports.octopus import octopus
+from reports.networking import aws_helper
+from reports.octopus import octopus, consts
 from reports.octopus.octopus import handle_uploaded_file
 from django.views.decorators.csrf import csrf_protect
 
 @csrf_protect
 def index(request):
     # cr_list = octopus.get_crash_runs()
-    template = loader.get_template('reports/index.html')
-    context = RequestContext(request)
-    return HttpResponse(template.render(context))
+    # template = loader.get_template('reports/index.html')
+    # context = RequestContext(request)
+
+    algo_list = aws_helper.listfolderfroms3(consts.awsautomationbucket, consts.awsalgorithem)
+
+    filtered_algo_list = []
+
+    # Filter out trash
+    for algoversion in algo_list:
+        if 'v-' in algoversion:
+            filtered_algo_list.append(algoversion)
+
+    return render(request, 'reports/index.html', {'algo_list' : filtered_algo_list})
 
 
 def crashrun(request, cycle_id):
@@ -23,6 +35,12 @@ def crashrun(request, cycle_id):
     except Crashrun.DoesNotExist:
         raise Http404
     return render(request, 'reports/crashrun.html', {'crashrun': cr})
+
+
+def get_update_progress(request):
+    data = octopus.get_update_progress()
+
+    return HttpResponse(json.dumps(data), content_type="application/json")
 
 def algovsalgo(request, choice):
     r = None
@@ -77,6 +95,18 @@ def set_video_group(request, choice, video_id, group):
     return HttpResponse(status, content_type = "text/plain")
 
 
+def run_algo(request, crashrun, optimize, updatedb,  algoversion):
+    status = ''
+    octopus.run_algo_by_name(crashrun, optimize, updatedb,  algoversion)
+
+    status = 'good'
+
+
+# def download_video(request, video_name):
+#     video = octopus.get_video(video_name)
+    return HttpResponse(status, content_type = "text/plain")
+
+
 # def upload_file(request):
 #     form = None
 #     if request.method == 'POST':
@@ -98,8 +128,8 @@ def upload_file(request):
             docfile = request.FILES['docfile']
             handle_uploaded_file(docfile)
 
-            # Redirect to the document list after POST
-            # return HttpResponseRedirect('reports/index.html')
+            # Redirect to the document index after POST
+            return HttpResponseRedirect('../')
     else:
         form = DocumentForm() # A empty, unbound form
 
