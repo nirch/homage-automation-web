@@ -343,8 +343,6 @@ function simultaneousPlayVideos(){
     var myPlayer2 = document.getElementById("div_video2");
     myPlayer.pause();
     myPlayer2.pause();
-    myPlayer.stop();
-    myPlayer2.stop();
     myPlayer.play();
     myPlayer2.play();
 }
@@ -375,13 +373,13 @@ function DownloadSelected(run_id){
 
     var pom = document.createElement('a');
     pom.setAttribute('href', movUrl);
-    pom.setAttribute('download', algo1 + "_" + cycle_id1 + "_output" + ".mp4");
+    pom.setAttribute('download', algo + "_" + cycle_id + "_output" + ".mp4");
     pom.setAttribute('type', 'video/mp4');
     pom.click();
 
      var pom2 = document.createElement('a');
     pom2.setAttribute('href', plfUrl);
-    pom2.setAttribute('download', algo1 + "_" + cycle_id1 + "_output" + ".plf");
+    pom2.setAttribute('download', algo + "_" + cycle_id + "_output" + ".plf");
     pom2.setAttribute('type', 'text/plain');
     pom2.click();
 }
