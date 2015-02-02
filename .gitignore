@@ -1,4 +1,8 @@
 .idea/
+<<<<<<< HEAD
 homage_automation_web/__pycache__/settings.cpython-34.pyc
 *.pyc
 homage_automation_web/settings.py
+=======
+.pyc
+>>>>>>> 73aa741150ca559aa42b34a841c8d850bbe1f54f
