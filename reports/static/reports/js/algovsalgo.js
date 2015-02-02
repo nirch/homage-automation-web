@@ -367,19 +367,19 @@ function DownloadSelected(run_id){
     var cycle_id = selval.split(',')[0];
     var algo = selval.split(',')[1];
 
-    var movUrl = "https://s3.amazonaws.com/homage-automation/Output/" + algo + "/" + cycle_id + "/" + currentvideo.value + "/" + algo + "_" + cycle_id + "_" + currentvideo.value + "output.mp4";
-    var plfUrl = "https://s3.amazonaws.com/homage-automation/Output/" + algo + "/" + cycle_id + "/" + currentvideo.value + "/" + algo + "_" + cycle_id + "_" + currentvideo.value + "output.plf";
+    var movUrl = "https://s3.amazonaws.com/homage-automation/Output/" + algo + "/" + cycle_id + "/" + currentvideo.value + "/" + "output.mp4";
+    var plfUrl = "https://s3.amazonaws.com/homage-automation/Output/" + algo + "/" + cycle_id + "/" + currentvideo.value + "/" + "output.plf";
 
 
     var pom = document.createElement('a');
     pom.setAttribute('href', movUrl);
-    pom.setAttribute('download', algo + "_" + cycle_id + "_output" + ".mp4");
+    pom.setAttribute('download', algo + "_" + cycle_id + currentvideo.value +  "_output" + ".mp4");
     pom.setAttribute('type', 'video/mp4');
     pom.click();
 
      var pom2 = document.createElement('a');
     pom2.setAttribute('href', plfUrl);
-    pom2.setAttribute('download', algo + "_" + cycle_id + "_output" + ".plf");
+    pom2.setAttribute('download', algo + "_" + cycle_id + currentvideo.value + "_output" + ".plf");
     pom2.setAttribute('type', 'text/plain');
     pom2.click();
 }
