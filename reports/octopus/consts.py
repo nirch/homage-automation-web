@@ -44,3 +44,6 @@ awsvideos = 'Videos/'
 awscrashrunvideos = 'CrashRunVideos/'
 awsalgorithem = 'Algorithem/'
 awsautomationbucket = 'homage-automation'
+
+# Automation Directory
+automation_directory = 'C:/Users/homage/Documents/homagealgorithmserver'

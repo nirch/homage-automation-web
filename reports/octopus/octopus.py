@@ -149,7 +149,7 @@ def get_video_groups():
     return Videos.objects.values('group').distinct()
 
 def run_algo_by_name(crashrun, optimize, updatedb,  algoversion):
-    os.chdir('D:\Documents\homage\homagealgorithmserver')
+    os.chdir(consts.automation_directory)
     cmd = 'python runautomation.py ' + str(crashrun) + ' ' +  str(optimize) + ' ' + str(updatedb) + ' '  + algoversion +\
           ' ' + 'D:\homage\RunAlgorithm'
     p = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
