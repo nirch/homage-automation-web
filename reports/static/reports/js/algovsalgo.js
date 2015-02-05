@@ -430,18 +430,28 @@ function runAlgortihm(){
 
     var xmlHttp = null;
 
+    var myVar = window.setInterval(function(){
+                  updateProgress()
+                }, 5000);
+
     xmlHttp = new XMLHttpRequest();
 
     xmlHttp.onreadystatechange=function()
     {
         if (xmlHttp.readyState==4 && xmlHttp.status==200)
         {
+            window.clearInterval(myVar);
             alert('finished running algorithm');
+        }
+        else{
+            window.clearInterval(myVar);
         }
     };
 
     xmlHttp.open( "GET", theUrl, true );
     xmlHttp.send( null );
+
+
 }
 
 function updateProgress(){
