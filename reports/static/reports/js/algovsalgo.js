@@ -279,7 +279,7 @@ function getvideos(cycle_id1, cycle_id2, choice, showallvids){
                 paging: false
             });
             new $.fn.dataTable.FixedHeader( table, {
-                "offsetTop": 350
+                bottom: true
             } );
 
             loading.innerHTML = "";

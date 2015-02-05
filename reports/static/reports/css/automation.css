@@ -13,14 +13,20 @@ p                { font: 10px/1.0em 'Helvetica',sans-serif; margin:20px }
     top:0px;
 }
 
-body { padding-top: 350px; }
-
 table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
 }
 th, td {
     padding: 5px;
+}
+
+.padme{
+    margin-bottom: 500px;
+}
+
+.center {
+     text-align: center;
 }
 
 button {

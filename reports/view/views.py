@@ -13,20 +13,23 @@ from django.views.decorators.csrf import csrf_protect
 
 @csrf_protect
 def index(request):
-    # cr_list = octopus.get_crash_runs()
-    # template = loader.get_template('reports/index.html')
-    # context = RequestContext(request)
+    if request.user.is_authenticated():
+        # cr_list = octopus.get_crash_runs()
+        # template = loader.get_template('reports/index.html')
+        # context = RequestContext(request)
 
-    algo_list = aws_helper.listfolderfroms3(consts.awsautomationbucket, consts.awsalgorithem)
+        algo_list = aws_helper.listfolderfroms3(consts.awsautomationbucket, consts.awsalgorithem)
 
-    filtered_algo_list = []
+        filtered_algo_list = []
 
-    # Filter out trash
-    for algoversion in algo_list:
-        if 'v-' in algoversion:
-            filtered_algo_list.append(algoversion)
+        # Filter out trash
+        for algoversion in algo_list:
+            if 'v-' in algoversion:
+                filtered_algo_list.append(algoversion)
 
-    return render(request, 'reports/index.html', {'algo_list' : filtered_algo_list})
+        return render(request, 'reports/index.html', {'algo_list' : filtered_algo_list})
+    else:
+        return HttpResponseRedirect('/login')
 
 
 def crashrun(request, cycle_id):
@@ -43,35 +46,38 @@ def get_update_progress(request):
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 def algovsalgo(request, choice):
-    r = None
-    runlist = []
-    if choice == '0':
-        r = octopus.get_crash_runs()
-        for run in r:
-            jsonrun = {}
-            jsonrun['cycle_id'] = run.cycle_id
-            jsonrun['algo_version'] = run.algo_version
-            jsonrun['params'] = run.params
-            jsonrun['start_date'] = run.start_date
-            jsonrun['end_date'] = run.end_date
-            jsonrun['crash_count'] = run.crash_count
-            runlist.append(jsonrun)
-    elif choice == '1':
-        r = octopus.get_auto_runs()
-        for run in r:
-            jsonrun = {}
-            jsonrun['cycle_id'] = run.cycle_id
-            jsonrun['algo_version'] = run.algo_version
-            jsonrun['params'] = run.params
-            jsonrun['start_date'] = run.start_date
-            jsonrun['end_date'] = run.end_date
-            jsonrun['avg_score'] = "{:10.2f}".format(run.avg_score)
-            jsonrun['crash_count'] = run.crash_count
-            runlist.append(jsonrun)
+    if request.user.is_authenticated():
+        r = None
+        runlist = []
+        if choice == '0':
+            r = octopus.get_crash_runs()
+            for run in r:
+                jsonrun = {}
+                jsonrun['cycle_id'] = run.cycle_id
+                jsonrun['algo_version'] = run.algo_version
+                jsonrun['params'] = run.params
+                jsonrun['start_date'] = run.start_date
+                jsonrun['end_date'] = run.end_date
+                jsonrun['crash_count'] = run.crash_count
+                runlist.append(jsonrun)
+        elif choice == '1':
+            r = octopus.get_auto_runs()
+            for run in r:
+                jsonrun = {}
+                jsonrun['cycle_id'] = run.cycle_id
+                jsonrun['algo_version'] = run.algo_version
+                jsonrun['params'] = run.params
+                jsonrun['start_date'] = run.start_date
+                jsonrun['end_date'] = run.end_date
+                jsonrun['avg_score'] = "{:10.2f}".format(run.avg_score)
+                jsonrun['crash_count'] = run.crash_count
+                runlist.append(jsonrun)
+        else:
+            raise Http404
+        videogroups = octopus.get_video_groups()
+        return render(request, 'reports/algovsalgo.html', {'runlist':runlist, 'choice':choice, 'videogroups':videogroups})
     else:
-        raise Http404
-    videogroups = octopus.get_video_groups()
-    return render(request, 'reports/algovsalgo.html', {'runlist':runlist, 'choice':choice, 'videogroups':videogroups})
+        return HttpResponseRedirect('/login')
 
 def get_videos(request, choice, cycle_id1, cycle_id2, group):
     videos = []
