@@ -27,10 +27,10 @@
     <div class="row">
          <input type="hidden" id="currentvideo">
         <label><input type="checkbox" id="showallvids" checked="true" onclick='refreshresults({{ choice }});'>Show All Vids</label>
-        <button id="downloadbutton" class="col-xs-2 btn btn-lg btn-warning" onclick="DownloadRemake(this)">Download</button>
+        <button id="downloadbutton" class="col-xs-2 btn btn-lg btn-warning" onclick="DownloadRemake(this,{{ choice }})">Download</button>
         <button id="downloadbutton" class="col-xs-2 btn btn-lg btn-warning" onclick="DownloadSelected('run1')">Download Select 1</button>
         <button id="downloadbutton" class="col-xs-2 btn btn-lg btn-warning" onclick="DownloadSelected('run2')">Download Select 2</button>
-        <input type="button" class="col-xs-2 btn btn-lg btn-warning" onclick="simultaneousPlayVideos()" value="Simultenous Play">
+        <input type="button" class="col-xs-2 btn btn-lg btn-warning" onclick="simultaneousPlayVideos({{ choice }})" value="Simultenous Play">
     </div>
     <div class="row">
         <label class="col-xs-1">Average 1:</label>

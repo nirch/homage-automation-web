@@ -136,20 +136,25 @@ function createGridRow(video, i, choice){
     headercol1.innerHTML = video.video_name1;
     headerrow.appendChild(headercol1);
     var headercol2 = document.createElement('td');
-    if(choice == 1) {
+    //if(choice == 1) {
         var inputElement = document.createElement('input');
         inputElement.type = "button";
         inputElement.value = "play";
         inputElement.addEventListener('click', function(){
-            startVideo(video.aws_output1,video.aws_output2, video.video_name1);
+            if(choice == 1) {
+                startVideo(video.aws_output1, video.aws_output2, video.video_name1, choice);
+            }
+            else{
+                startVideo(null, null, video.video_name1, choice);
+            }
         });
 
         headercol2.appendChild(inputElement);
-    }
-     else
-    {
-        headercol2.innerHTML = "na";
-    }
+    //}
+    // else
+    //{
+    //    headercol2.innerHTML = "na";
+    //}
     headerrow.appendChild(headercol2);
     var headercol22 = document.createElement('td');
     headercol22.innerHTML = video.video_id1;
@@ -312,10 +317,15 @@ function sortJsonArrayByProperty(objArray, prop, direction){
     }
 }
 
-function startVideo(url,url2, videoname){
+function startVideo(url,url2, videoname, choice){
+    var mainUrl = "https://s3.amazonaws.com/homage-automation/Videos/";
+    if(choice == 0){
+        mainUrl = "https://s3.amazonaws.com/homage-automation/CrashRunVideos/";
+    }
+
     var myPlayer = document.getElementById("div_original");
     myPlayer.pause();
-    myPlayer.setAttribute('src', "https://s3.amazonaws.com/homage-automation/Videos/" + videoname + "/" + videoname + ".mov");
+    myPlayer.setAttribute('src', mainUrl + videoname + "/" + videoname + ".mov");
 //    myPlayer.innerHTML = '<source src="' + url + '" type="video/mp4">';
     myPlayer.load();
     myPlayer.play();
@@ -323,35 +333,45 @@ function startVideo(url,url2, videoname){
     var currentvideo = document.getElementById("currentvideo");
     currentvideo.value = videoname;
 
-    var myPlayer = document.getElementById("div_video1");
-    myPlayer.pause();
-    myPlayer.setAttribute('src', url);
-//    myPlayer.innerHTML = '<source src="' + url + '" type="video/mp4">';
-    myPlayer.load();
-    myPlayer.play();
+    if(choice == 1) {
 
-    var myPlayer2 = document.getElementById("div_video2");
-    myPlayer2.pause();
-    myPlayer2.setAttribute('src', url2);
+        var myPlayer = document.getElementById("div_video1");
+        myPlayer.pause();
+        myPlayer.setAttribute('src', url);
 //    myPlayer.innerHTML = '<source src="' + url + '" type="video/mp4">';
-    myPlayer2.load();
-    myPlayer2.play();
+        myPlayer.load();
+        myPlayer.play();
+
+        var myPlayer2 = document.getElementById("div_video2");
+        myPlayer2.pause();
+        myPlayer2.setAttribute('src', url2);
+//    myPlayer.innerHTML = '<source src="' + url + '" type="video/mp4">';
+        myPlayer2.load();
+        myPlayer2.play();
+    }
 }
 
-function simultaneousPlayVideos(){
-    var myPlayer = document.getElementById("div_video1");
-    var myPlayer2 = document.getElementById("div_video2");
-    myPlayer.pause();
-    myPlayer2.pause();
-    myPlayer.play();
-    myPlayer2.play();
+function simultaneousPlayVideos(choice){
+    if(choice == 1) {
+        var myPlayer = document.getElementById("div_video1");
+        var myPlayer2 = document.getElementById("div_video2");
+        myPlayer.pause();
+        myPlayer2.pause();
+        myPlayer.play();
+        myPlayer2.play();
+    }
 }
 
 //Download the video from S3
-function DownloadRemake(button) {
+function DownloadRemake(button, choice) {
+
+    var mainUrl = "https://s3.amazonaws.com/homage-automation/Videos/";
+    if(choice == 0){
+        mainUrl = "https://s3.amazonaws.com/homage-automation/CrashRunVideos/";
+    }
 
     var currentvideo = document.getElementById("currentvideo");
-    var movUrl = "https://s3.amazonaws.com/homage-automation/Videos/" + currentvideo.value + ".zip";
+    var movUrl = mainUrl + currentvideo.value + ".zip";
 
     var pom = document.createElement('a');
     pom.setAttribute('href', movUrl);
@@ -360,22 +380,23 @@ function DownloadRemake(button) {
     pom.click();
 }
 
-function DownloadSelected(run_id){
-    var currentvideo = document.getElementById("currentvideo");
-    var selrun = document.getElementById(run_id);
-    var selval = selrun.options[selrun.selectedIndex].value;
-    var cycle_id = selval.split(',')[0];
-    var algo = selval.split(',')[1];
+function DownloadSelected(run_id, choice){
+    if (choice == 1) {
+        var currentvideo = document.getElementById("currentvideo");
+        var selrun = document.getElementById(run_id);
+        var selval = selrun.options[selrun.selectedIndex].value;
+        var cycle_id = selval.split(',')[0];
+        var algo = selval.split(',')[1];
 
-    var movUrl = "https://s3.amazonaws.com/homage-automation/Output/" + algo + "/" + cycle_id + "/" + currentvideo.value + ".zip";
+        var movUrl = "https://s3.amazonaws.com/homage-automation/Output/" + algo + "/" + cycle_id + "/" + currentvideo.value + ".zip";
 
 
-    var pom = document.createElement('a');
-    pom.setAttribute('href', movUrl);
-    pom.setAttribute('download', algo + "_" + cycle_id + "_" + currentvideo.value + ".zip");
-    pom.setAttribute('type', 'application/zip');
-    pom.click();
-
+        var pom = document.createElement('a');
+        pom.setAttribute('href', movUrl);
+        pom.setAttribute('download', algo + "_" + cycle_id + "_" + currentvideo.value + ".zip");
+        pom.setAttribute('type', 'application/zip');
+        pom.click();
+    }
 }
 
 function setVideoGroup(choice , videoid, group, chkid){
@@ -454,6 +475,26 @@ function runAlgortihm(){
 
 }
 
+var autoRefresh = true;
+var intervalVar = null;
+
+function startAutoRefersh(){
+    updateProgressButton = document.getElementById("updateProgressButton");
+    if(autoRefresh){
+        updateProgressButton.innerHTML = "Stop Auto Refresh"
+        updateProgress()
+        intervalVar = window.setInterval(function(){
+                  updateProgress()
+                }, 5000);
+        autoRefresh = false;
+    }
+    else{
+        updateProgressButton.innerHTML = "Start Auto Refresh"
+        window.clearInterval(intervalVar);
+        autoRefresh = true;
+    }
+}
+
 function updateProgress(){
 
     var theUrl = 'get_progress/';
@@ -469,8 +510,10 @@ function updateProgress(){
             var progress = JSON.parse(xmlHttp.responseText);
             algoprogress = document.getElementById('algorun_progress');
             progress_message = document.getElementById('progress_message');
+            algoversion = document.getElementById('algoversion');
             algoprogress.value = progress.algorun.value;
             algoprogress.max = progress.algorun.max;
+            algoversion.innerHTML = progress.algorun.algo_version
             progress_message.innerHTML = progress.algorun.status;
         }
     };
